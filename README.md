@@ -12,3 +12,9 @@ https://www.youtube.com/трейлер
 
 Видео полной миссии в KSP:
 https://drive.google.com/drive/видео
+
+## TheBoys
+#### :money_mouth_face: Burmakin Michael
+#### :money_mouth_face: Ivanov Ivan
+#### :money_mouth_face: Han Albert
+#### :money_mouth_face: Ignatiev Artem
