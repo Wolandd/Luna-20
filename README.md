@@ -1,17 +1,10 @@
 # Luna-20
 ## Содержание проекта
 О проекте, презентация, отчеты:
-https://docs.google.com/document/наш_отчет
+https://docs.google.com/document/d/1vqDYkIAiYLzvMpSFWH4z8FF3QpoaQDeE0C1Rpo0u3XA/edit?usp=sharing
 
-Calculations - программная реализация математической модели
+## План работы:
 
-Mission Trailer - рекламный ролик проекта и проделанной работы (также доступен на YouTube)
-
-Трейлер проекта в YouTube:
-https://www.youtube.com/трейлер
-
-Видео полной миссии в KSP:
-https://drive.google.com/drive/видео
 
 ## TheBoys
 #### :money_mouth_face: Burmakin Michael
