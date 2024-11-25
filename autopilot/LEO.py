@@ -1,34 +1,42 @@
 import krpc
 from time import sleep
 
-def start(vessel, space_center, connection, ascentProfileConstant=1.25):
-    """Sends vessel to orbit 75 x 70km in prep for transfer burn"""
+def start(vessel, space_center, connection):
     vessel.control.rcs = True
+    orbit_height = 80000
+    ascent_profile = 0.5 
+    # константу восхождения берем 0.5 для опережения при построении орбиты, а так можно и 0.25, роли не играет
 
-    vessel.control.throttle = 1
+    vessel.control.throttle = 1 # запуск движков
 
-    apoapsisStream = connection.add_stream(getattr, vessel.orbit, 'apoapsis_altitude')
+    # чекаем наш апоцентр
+    apoapsisControl = connection.add_stream(getattr, vessel.orbit, 'apoapsis_altitude')
 
+    # подключаем пилотирование и наклоняемся на 90 градусов
     vessel.auto_pilot.engage()
     vessel.auto_pilot.target_heading = 90
 
-    # Get to proper apoapsis/complete gravity turn
-    while apoapsisStream() < 75000:
-        # Collect values
-        targetPitch = 90 - ((90/(75000**ascentProfileConstant))*(apoapsisStream()**ascentProfileConstant))
-        print("Current target pitch:", targetPitch, "with apoapsis", apoapsisStream())
+    # пока апоцентр меньше желаемой высоты орбиты, газуем
+    while apoapsisControl() < orbit_height:
+        # считаем угол, на который нужно нацелиться
+        target_pitch = 90 - ((90/(orbit_height**ascent_profile))*(apoapsisControl()**ascent_profile))
+        print(f'\nНакреняяемся на {target_pitch}')
+        print(f'Апоцентр {apoapsisControl()}\n')
 
-        # Set autopilot
-        vessel.auto_pilot.target_pitch = targetPitch
+        # накреняем
+        vessel.auto_pilot.target_pitch = target_pitch
 
         sleep(0.1)
 
     vessel.control.throttle = 0
-    timeToApoapsisStream = connection.add_stream(getattr, vessel.orbit, 'time_to_apoapsis')
-    periapsisStream = connection.add_stream(getattr, vessel.orbit, 'periapsis_altitude')
-    # Now, wait and perform circularization burn
-    while(timeToApoapsisStream() > 22):
-        if(timeToApoapsisStream() > 60):
+    apoapsisTime = connection.add_stream(getattr, vessel.orbit, 'time_to_apoapsis')
+    
+    # чекаем наш перицентр
+    periapsisControl = connection.add_stream(getattr, vessel.orbit, 'periapsis_altitude')
+    
+    # ускорение времени по приближению к апоцентру
+    while(apoapsisTime() > 22):
+        if(apoapsisTime() > 60):
             space_center.rails_warp_factor = 4
         else:
             space_center.rails_warp_factor = 0
@@ -36,31 +44,32 @@ def start(vessel, space_center, connection, ascentProfileConstant=1.25):
         sleep(0.5)
 
     vessel.control.throttle = 0.5
-    lastUT = space_center.ut
-    lastTimeToAp = timeToApoapsisStream()
-    while(periapsisStream() < 70500):
+    last_UT = space_center.ut
+    last_time_to_apoapsis = apoapsisTime()
+    while(periapsisControl() < orbit_height):
         sleep(0.2)
-        timeToAp = timeToApoapsisStream()
+        time_to_apoapsis = apoapsisTime()
         UT = space_center.ut
-        deltaTimeToAp = (timeToAp - lastTimeToAp) / (space_center.ut - lastUT)
+        delta = (time_to_apoapsis - last_time_to_apoapsis) / (UT - last_UT)
 
-        print("Estimated change in time to apoapsis per second:", deltaTimeToAp)
+        print("Время до апоцентра:", delta)
 
-        if deltaTimeToAp < -0.3:
+        # если перелетаем, то подгазовываем
+        if delta < -0.3:
             vessel.control.throttle += 0.03
-        elif deltaTimeToAp < -0.1:
+        elif delta < -0.1:
             vessel.control.throttle += 0.01
-
-        if deltaTimeToAp > 0.2:
+        # если апоцентр убегает, то притормаживаем
+        if delta > 0.2:
             vessel.control.throttle -= 0.03
-        elif deltaTimeToAp > 0:
+        elif delta > 0:
             vessel.control.throttle -= 0.01
 
-        lastTimeToAp = timeToApoapsisStream()
-        lastUT = space_center.ut
+        last_time_to_apoapsis = time_to_apoapsis
+        last_UT = UT
 
     vessel.control.throttle = 0
-    print("Apoapsis: ", apoapsisStream())
-    print("Periapsis: ", periapsisStream())
-    print("Orbit achieved!")
+    print("Апоцентр: ", apoapsisControl())
+    print("Перицентр: ", periapsisControl())
+    print("Орбита построена")
     print()
