@@ -71,5 +71,4 @@ def start(vessel, space_center, connection):
     vessel.control.throttle = 0
     print("Апоцентр: ", apoapsisControl())
     print("Перицентр: ", periapsisControl())
-    print("Орбита построена")
-    print()
+    print("Орбита построена\n")

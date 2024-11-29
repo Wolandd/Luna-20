@@ -6,14 +6,9 @@ def start(vessel, space_center, connection):
     vessel.control.rcs = True
 
     # раскрываем отсек, солнечные панели, антены и свет
-
     vessel.control.solar_panels = True
     vessel.control.antennas = True 
     vessel.control.lights = True
-
-    vessel.auto_pilot.engage()
-    vessel.auto_pilot.reference_frame = vessel.orbital_reference_frame
-    vessel.auto_pilot.target_direction = (0.0, 1.0, 0.0)  # Point pro-grade
 
     moon = space_center.bodies["Mun"]
     moon_orbit = moon.orbit
@@ -30,7 +25,7 @@ def start(vessel, space_center, connection):
 
     previous_phase_angle_deg = 0
     phase_angle_decreasing = False
-    space_center.rails_warp_factor = 0 # Start with no warp
+    space_center.rails_warp_factor = 0
 
     while True:
         current_time = space_center.ut
@@ -45,7 +40,7 @@ def start(vessel, space_center, connection):
             current_phase_angle_rad = math.acos((moon_radius**2 + vessel_radius**2 - distance**2) / (2 * moon_radius * vessel_radius))
             current_phase_angle_deg = current_phase_angle_rad * 180 / math.pi
         except ValueError:
-            print("Ошибка, считать не получается")
+            print("Ошибка, считать не получается\n")
             sleep(1)
             continue
 
@@ -67,21 +62,18 @@ def start(vessel, space_center, connection):
         previous_phase_angle_deg = current_phase_angle_deg
         sleep(1)
 
-    print("Угол есть, газуем")
+    print("Угол есть, газуем\n")
     space_center.rails_warp_factor = 0
 
-
-
-    GM = vessel.orbit.body.gravitational_parameter # стандартный гравитационный параметр Земли (Кербина в нашем случае)
     r1 = vessel.orbit.radius # радиус начальной орбиты
-    r2 = moon_orbit.semi_major_axis / 2 # целевой радиус орбиты
+    r2 = moon_radius # целевой радиус орбиты
     rd = r2 / r1 # отношение радиусов
     v1 = vessel.orbit.speed # начальная орбитальная скорость
     delta_velocity = v1*(((2 * rd) / (rd + 1))**0.5 - 1) # ускорение дельта v для перехода на эллиптическую траекторию
-    delta_deceleration = (v1 / (rd**0.5)) * (1 - (2 / (rd +1 ))**0.5) # ускорение торможения для перехода на окололунную орбиту
-
+    delta_deceleration = (v1 / (rd**0.5)) * (1 - (2 / (rd + 1))**0.5) # ускорение торможения для перехода на окололунную орбиту
+    print(v1 - delta_deceleration)
+    
     print(v1, rd, delta_velocity)
-    delta_velocity *= 1.05 # берем с погрешностью
     while vessel.orbit.speed < (v1 + delta_velocity):
         if vessel.orbit.speed / (v1 + delta_velocity) > 0.97:
             vessel.control.throttle = 0.5
@@ -89,4 +81,25 @@ def start(vessel, space_center, connection):
             vessel.control.throttle = 1
     vessel.control.throttle = 0
 
-    # здесь будет торможение
+    print('Летим к Луне\n')
+
+    periapsisTime = connection.add_stream(getattr, vessel.orbit, 'time_to_periapsis')
+
+    time_to_periapsis = periapsisTime()
+
+    while time_to_periapsis > 600:
+        space_center.rails_warp_factor = 5
+        time_to_periapsis = periapsisTime()
+    
+    space_center.rails_warp_factor = 0
+    vessel.auto_pilot.target_direction = (0.0, -1.0, 0.0) # направляем ракету против движения
+
+    v = vessel.orbit.speed
+    while vessel.orbit.speed > (v - delta_deceleration):
+        if vessel.orbit.speed / (v - delta_deceleration) > 0.97:
+            vessel.control.throttle = 0.5
+        else:
+            vessel.control.throttle = 1
+    vessel.control.throttle = 0
+
+    print('Орбита у Луны построена\n')
