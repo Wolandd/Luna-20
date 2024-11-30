@@ -48,18 +48,18 @@ def start(vessel, space_center, connection):
 
     # скорость относительно поверхности
     surface_velocity_Control = connection.add_stream(getattr, vessel.flight(vessel.orbit.body.reference_frame), 'speed')
-    landing_final = True # флаг для перехода на последнюю ступень
+    stage_check = vessel.control.current_stage # проверка ступени, нужно, чтобы при посадки перейти на последнюю в случае чего
     vessel.control.gear = True # посадочные опоры
 
     while altitudeControl() > 10:
         sleep(0.2)
         # надо будет добавить проверку на количество оставшихся ступеней, чтобы оно ненароком не перешло на то, что не надо
-        if altitudeControl() <= 150 and landing_final:
+        if altitudeControl() <= 150 and stage_check == 3:
             vessel.control.throttle = 0
             sleep(0.1)
             vessel.control.activate_next_stage() 
-            landing_final = False
-        print(f"Высота над поверхностью {altitudeControl():.2f}")
+            stage_check = vessel.control.current_stage
+        print(f"Высота над поверхностью: {altitudeControl():.2f}")
         speed = surface_velocity_Control()
         if speed > 100:
             vessel.control.throttle = 1
@@ -72,5 +72,20 @@ def start(vessel, space_center, connection):
         elif speed < 2:
             vessel.control.throttle = 0
     vessel.control.throttle = 0
+    vessel.control.brakes = True # торможение (группа действий для опор)
 
     print('Луна наша')
+
+def drilling(vessel, space_center, connection):
+    drill = vessel.parts.resource_harvesters[0]
+    print("Опускаем бур")
+    drill.deployed = True
+    sleep(5)
+    print("Получаем образец грунта")
+    drill.active = True
+    sleep(20)
+    print("Выключаем")
+    drill.active = False
+    sleep(0.5)
+    print("Складываем бур")
+    drill.deployed = False

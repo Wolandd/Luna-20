@@ -5,7 +5,7 @@ import math
 def start(vessel, space_center, connection):
     vessel.control.rcs = True
 
-    # раскрываем отсек, солнечные панели, антены и свет
+    # раскрываем солнечные панели, антены и свет
     vessel.control.solar_panels = True
     vessel.control.antennas = True 
     vessel.control.lights = True
@@ -101,5 +101,6 @@ def start(vessel, space_center, connection):
         else:
             vessel.control.throttle = 1
     vessel.control.throttle = 0
+    vessel.auto_pilot.disengage()
 
     print('Орбита у Луны построена\n')
