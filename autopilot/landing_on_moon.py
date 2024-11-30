@@ -23,7 +23,7 @@ def start(vessel, space_center, connection):
     sleep(10)
 
     # торможение на орбите
-    while vessel.orbit.speed > 5:
+    while vessel.orbit.speed > 6:
         if vessel.orbit.speed <= 50:
             vessel.control.throttle = vessel.orbit.speed / 100
         else:
