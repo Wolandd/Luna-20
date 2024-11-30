@@ -73,7 +73,7 @@ def orbitDeceleration(vessel, space_center, connection):
     vessel.control.lights = False
     vessel.control.radiators = True
 
-def landing(vessel, space_center, connection):
+def landing(vessel, connection):
     vessel.auto_pilot.target_direction = (0.0, -1.0, 0.0)
     vessel.auto_pilot.wait()
     apoapsisControl = connection.add_stream(getattr, vessel.orbit, 'apoapsis_altitude')
