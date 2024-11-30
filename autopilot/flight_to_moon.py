@@ -104,3 +104,4 @@ def start(vessel, space_center, connection):
     vessel.auto_pilot.disengage()
 
     print('Орбита у Луны построена\n')
+    sleep(10)

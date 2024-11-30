@@ -23,6 +23,7 @@ def launchFromMoon(vessel):
 
     vessel.control.gear = False
     vessel.auto_pilot.disengage()
+    sleep(10)
 
 def orbitCorrection(vessel, space_center, connection):
     deceleration_height = 45000
@@ -50,6 +51,7 @@ def orbitCorrection(vessel, space_center, connection):
                 vessel.control.throttle -= 0.01
     vessel.control.throttle = 0
     vessel.auto_pilot.disengage()
+    sleep(10)
 
 def orbitDeceleration(vessel, space_center, connection):
     vessel.auto_pilot.engage()
@@ -90,5 +92,7 @@ def landing(vessel, space_center, connection):
         if altitudeControl() < 30000:
             vessel.control.gear = True
             vessel.control.parachutes = True
+            vessel.control.rcs = False
     
+    vessel.auto_pilot.disengage()
     print('Успешное приземление')

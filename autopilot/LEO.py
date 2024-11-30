@@ -4,7 +4,7 @@ from time import sleep
 def start(vessel, space_center, connection):
     vessel.control.rcs = True
     orbit_height = 80000
-    ascent_profile = 0.5 
+    ascent_profile = 0.8
     # константу восхождения берем 0.5 для опережения при построении орбиты, а так можно и 0.25, роли не играет
 
     vessel.control.throttle = 1 # запуск движков
@@ -72,3 +72,4 @@ def start(vessel, space_center, connection):
     print("Апоцентр: ", apoapsisControl())
     print("Перицентр: ", periapsisControl())
     print("Орбита построена\n")
+    sleep(10)

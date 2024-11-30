@@ -23,7 +23,7 @@ def start(vessel, space_center, connection):
     sleep(10)
 
     # торможение на орбите
-    while vessel.orbit.speed > 5:
+    while vessel.orbit.speed > 10:
         if vessel.orbit.speed <= 50:
             vessel.control.throttle = vessel.orbit.speed / 100
         else:
@@ -33,7 +33,7 @@ def start(vessel, space_center, connection):
     altitudeControl = connection.add_stream(getattr, vessel.flight(), 'surface_altitude') # расстояние до поверхности
 
     # берем с запасом в 13к метров, с этой позиции начинаем торможение
-    while altitudeControl() > vessel.flight().elevation + 13000:
+    while altitudeControl() > vessel.flight().elevation + 10000:
         if altitudeControl() > vessel.flight().elevation + 40000:
             space_center.rails_warp_factor = 3
         else:
@@ -52,7 +52,6 @@ def start(vessel, space_center, connection):
     vessel.control.gear = True # посадочные опоры
 
     while altitudeControl() > 10:
-        sleep(0.2)
         # надо будет добавить проверку на количество оставшихся ступеней, чтобы оно ненароком не перешло на то, что не надо
         if altitudeControl() <= 150 and stage_check == 3:
             vessel.control.throttle = 0
@@ -73,8 +72,10 @@ def start(vessel, space_center, connection):
             vessel.control.throttle = 0
     vessel.control.throttle = 0
     vessel.control.brakes = True # торможение (группа действий для опор)
+    vessel.auto_pilot.disengage()
 
     print('Луна наша')
+    sleep(10)
 
 def drilling(vessel, space_center, connection):
     drill = vessel.parts.resource_harvesters[0]
@@ -89,3 +90,4 @@ def drilling(vessel, space_center, connection):
     sleep(0.5)
     print("Складываем бур")
     drill.deployed = False
+    sleep(10)

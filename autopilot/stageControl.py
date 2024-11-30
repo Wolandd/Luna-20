@@ -15,7 +15,7 @@ def control(vessel):
         liquid_fuel = resources.amount("LiquidFuel") # ЖТ
 
         # если вдруг топливо кончается, то переходим к следующей ступени
-        if solid_fuel == 0 and liquid_fuel == 0:
+        if solid_fuel == 0 and liquid_fuel == 0 and vessel.control.current_stage > 0:
             print("Переход на следующую ступень")
             vessel.control.activate_next_stage()
 
