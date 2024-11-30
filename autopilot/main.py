@@ -37,4 +37,4 @@ back_to_home.orbitCorrection(vessel, space_center, connection)
 back_to_home.orbitDeceleration(vessel, space_center, connection)
 
 # приземление
-back_to_home.landing(vessel, space_center, connection)
+back_to_home.landing(vessel, connection)
