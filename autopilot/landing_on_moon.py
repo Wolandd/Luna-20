@@ -73,8 +73,7 @@ def start(vessel, space_center, connection):
             vessel.control.throttle = 0
     vessel.control.throttle = 0
     vessel.control.brakes = True # торможение (группа действий для опор)
-    vessel.auto_pilot.disengage()
-
+    
     print('Луна наша')
     sleep(10)
 
