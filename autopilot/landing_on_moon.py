@@ -52,6 +52,7 @@ def start(vessel, space_center, connection):
     vessel.control.gear = True # посадочные опоры
 
     while altitudeControl() > 10:
+        sleep(0.2)
         # надо будет добавить проверку на количество оставшихся ступеней, чтобы оно ненароком не перешло на то, что не надо
         if altitudeControl() <= 150 and stage_check == 3:
             vessel.control.throttle = 0
