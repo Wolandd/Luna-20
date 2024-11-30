@@ -53,7 +53,6 @@ def start(vessel, space_center, connection):
 
     while altitudeControl() > 10:
         sleep(0.2)
-        # надо будет добавить проверку на количество оставшихся ступеней, чтобы оно ненароком не перешло на то, что не надо
         if altitudeControl() <= 150 and stage_check == 3:
             vessel.control.throttle = 0
             sleep(0.1)
@@ -73,7 +72,7 @@ def start(vessel, space_center, connection):
             vessel.control.throttle = 0
     vessel.control.throttle = 0
     vessel.control.brakes = True # торможение (группа действий для опор)
-    
+
     print('Луна наша')
     sleep(10)
 
