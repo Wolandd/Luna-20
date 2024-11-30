@@ -23,7 +23,7 @@ def start(vessel, space_center, connection):
     sleep(10)
 
     # торможение на орбите
-    while vessel.orbit.speed > 10:
+    while vessel.orbit.speed > 5:
         if vessel.orbit.speed <= 50:
             vessel.control.throttle = vessel.orbit.speed / 100
         else:
@@ -52,6 +52,8 @@ def start(vessel, space_center, connection):
     vessel.control.gear = True # посадочные опоры
 
     while altitudeControl() > 10:
+        vessel.auto_pilot.target_direction = (0.0, -1.0, 0.0)
+        vessel.auto_pilot.wait()
         sleep(0.2)
         if altitudeControl() <= 150 and stage_check == 3:
             vessel.control.throttle = 0
