@@ -33,7 +33,7 @@ def start(vessel, space_center, connection):
     altitudeControl = connection.add_stream(getattr, vessel.flight(), 'surface_altitude') # расстояние до поверхности
 
     # берем с запасом в 13к метров, с этой позиции начинаем торможение
-    while altitudeControl() > vessel.flight().elevation + 10000:
+    while altitudeControl() > vessel.flight().elevation + 13000:
         if altitudeControl() > vessel.flight().elevation + 40000:
             space_center.rails_warp_factor = 3
         else:
@@ -52,8 +52,6 @@ def start(vessel, space_center, connection):
     vessel.control.gear = True # посадочные опоры
 
     while altitudeControl() > 10:
-        vessel.auto_pilot.target_direction = (0.0, -1.0, 0.0)
-        vessel.auto_pilot.wait()
         sleep(0.2)
         if altitudeControl() <= 150 and stage_check == 3:
             vessel.control.throttle = 0
