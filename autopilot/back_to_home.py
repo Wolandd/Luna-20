@@ -91,6 +91,5 @@ def landing(vessel, connection):
             vessel.control.gear = True
             vessel.control.parachutes = True
             vessel.control.rcs = False
-    
-    vessel.auto_pilot.disengage()
+            vessel.auto_pilot.disengage()
     print('Успешное приземление')
