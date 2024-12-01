@@ -83,8 +83,6 @@ def landing(vessel, connection):
         if altitudeControl() < 100000:
             vessel.control.throttle = 1
     vessel.control.throttle = 0
-    vessel.control.gear = True
-    vessel.control.parachutes = True
 
     while altitudeControl() > 100:
         sleep(0.5)
