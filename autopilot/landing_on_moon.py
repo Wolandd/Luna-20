@@ -48,16 +48,15 @@ def start(vessel, space_center, connection):
 
     # скорость относительно поверхности
     surface_velocity_Control = connection.add_stream(getattr, vessel.flight(vessel.orbit.body.reference_frame), 'speed')
-    stage_check = vessel.control.current_stage # проверка ступени, нужно, чтобы при посадки перейти на последнюю в случае чего
+    stageControl = connection.add_stream(getattr, vessel.control, 'current_stage') # проверка ступени, нужно, чтобы при посадки перейти на последнюю в случае чего
     vessel.control.gear = True # посадочные опоры
 
     while altitudeControl() > 10:
         sleep(0.2)
-        if altitudeControl() <= 150 and stage_check == 3:
+        if altitudeControl() <= 150 and stageControl() > 1:
             vessel.control.throttle = 0
             sleep(0.1)
             vessel.control.activate_next_stage() 
-            stage_check = vessel.control.current_stage
         print(f"Высота над поверхностью: {altitudeControl():.2f}")
         speed = surface_velocity_Control()
         if speed > 100:
