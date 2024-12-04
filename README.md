@@ -1,7 +1,7 @@
 # Luna-20
 ## Содержание проекта
-О проекте, презентация, отчеты:
-https://docs.google.com/document/d/1vqDYkIAiYLzvMpSFWH4z8FF3QpoaQDeE0C1Rpo0u3XA/edit?usp=sharing
+Отчет:
+https://github.com/Wolandd/Luna-20/blob/main/%D0%9E%D1%82%D1%87%D0%B5%D1%82_%D0%97%D0%B5%D0%9F%D0%B0%D1%86%D0%B0%D0%BD%D1%8B.docx
 
 ## План работы:
 https://github.com/Wolandd/Luna-20/blob/2392666261dd853d5910e7e41574013deb5c59b2/plan_varkt.pdf
