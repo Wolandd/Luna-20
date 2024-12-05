@@ -23,7 +23,7 @@ def start(vessel, space_center, connection):
     sleep(10)
 
     # торможение на орбите
-    while vessel.orbit.speed > 6:
+    while vessel.orbit.speed > 7:
         if vessel.orbit.speed <= 50:
             vessel.control.throttle = vessel.orbit.speed / 100
         else:
@@ -52,16 +52,17 @@ def start(vessel, space_center, connection):
     vessel.control.gear = True # посадочные опоры
 
     while altitudeControl() > 10:
-        sleep(0.2)
+        sleep(0.1)
         if altitudeControl() <= 150 and stageControl() > 1:
             vessel.control.throttle = 0
-            sleep(0.1)
             vessel.control.activate_next_stage() 
         print(f"Высота над поверхностью: {altitudeControl():.2f}")
         speed = surface_velocity_Control()
-        if speed > 100:
+        if speed > 150:
             vessel.control.throttle = 1
-        elif speed > 15:
+        elif speed > 100 and altitudeControl() <= 3000:
+            vessel.control.throttle = 1
+        elif speed > 15 and altitudeControl() <= 2000:
             vessel.control.throttle = speed / 100
         elif speed > 5 and altitudeControl() <= 1000:
             vessel.control.throttle += 0.01
