@@ -6,8 +6,8 @@
 * *Трейлер проекта:* * https://drive.google.com/file/d/1RP4H8ddJiy-do6oaFI_BP1zFNSwlrLMV/view?usp=sharing
 
 ### Техническая реализация:
-* *Автопилот KSP:* * https://github.com/Wolandd/Luna-20/tree/main/autopilot
-* *Программные вычисления:* * https://github.com/Wolandd/Luna-20/blob/main/calculations/calc.py
+* *Автопилот KSP:* https://github.com/Wolandd/Luna-20/tree/main/autopilot
+* *Программные вычисления:* https://github.com/Wolandd/Luna-20/blob/main/calculations/calc.py
 
 ## Команда TheBoys
 #### :money_mouth_face: Burmakin Michael
