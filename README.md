@@ -4,6 +4,7 @@
 * *Отчет:* https:
 * *План работы:* https://github.com/Wolandd/Luna-20/blob/main/documents/plan_varkt.pdf
 * *Трейлер проекта:* https://drive.google.com/file/d/1RP4H8ddJiy-do6oaFI_BP1zFNSwlrLMV/view?usp=sharing
+* *Презентация проекта:* https://docs.google.com/presentation/d/138Jf6XHFqv3zmW5wIC-Bwu8QacP1PW55n61uW1XBDfk/edit?usp=sharing
 
 ### Техническая реализация:
 * *Автопилот KSP:* https://github.com/Wolandd/Luna-20/tree/main/autopilot
